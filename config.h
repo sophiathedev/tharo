@@ -16,6 +16,6 @@ struct config {
 
 typedef struct config config_t;
 
-void initialize_config( config_t *config );
+void initialize_config(config_t *config);
 
 #endif  //CONFIG_H

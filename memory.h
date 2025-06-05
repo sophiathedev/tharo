@@ -17,8 +17,8 @@ struct meminfo {
 
 typedef struct meminfo meminfo_t;
 
-void          initialize_mem_info( meminfo_t *info );
-unsigned long calculate_free_mem_blocks( const meminfo_t *info );
-void          get_readable_mem_blocks( char *buf, unsigned long blocks );
+void          initialize_mem_info(meminfo_t *info);
+unsigned long calculate_free_mem_blocks(const meminfo_t *info);
+void          get_readable_mem_blocks(char *buf, unsigned long blocks);
 
 #endif  //MEMORY_H

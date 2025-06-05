@@ -82,13 +82,13 @@ SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyParentheses: false
-SpacesInParens: Custom
-SpacesInParensOptions:
-  ExceptDoubleParentheses: true
-  InConditionalStatements: true
-  InCStyleCasts: true
-  InEmptyParentheses: false
-  Other: true
+#SpacesInParens: Custom
+#SpacesInParensOptions:
+#  ExceptDoubleParentheses: true
+#  InConditionalStatements: true
+#  InCStyleCasts: true
+#  InEmptyParentheses: false
+#  Other: true
 SpacesBeforeTrailingComments: 2
 SpacesInAngles: Always
 SpacesInCStyleCastParentheses: false

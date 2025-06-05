@@ -9,4 +9,4 @@
 
 void verbose_msg(int required_verbose, int current_verbose, const char *format, ...);
 
-#endif //LOGGER_H
+#endif  //LOGGER_H

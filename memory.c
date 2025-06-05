@@ -18,36 +18,36 @@
 #define MEM_SRECLAIMABLE 4
 #define MEM_SHMEM        5
 
-static const char *proc_meminfo_field[6] = { "MemTotal", "MemFree", "Buffers", "Cached", "SReclaimable", "Shmem" };
+static const char *proc_meminfo_field[6] = {"MemTotal", "MemFree", "Buffers", "Cached", "SReclaimable", "Shmem"};
 
-__always_inline void initialize_mem_info( meminfo_t *info ) {
+INLINE void initialize_mem_info(meminfo_t *info) {
 #ifdef __linux__
-  FILE *proc_meminfo = fopen( "/proc/meminfo", "r" );
-  if ( proc_meminfo == NULL ) {
-    verbose_msg( VERBOSE_ERROR, VERBOSE_ALL, "Cannot open /proc/meminfo." );
-    exit( EXIT_FAILURE );
+  FILE *proc_meminfo = fopen("/proc/meminfo", "r");
+  if (proc_meminfo == NULL) {
+    verbose_msg(VERBOSE_ERROR, VERBOSE_ALL, "Cannot open /proc/meminfo.");
+    exit(EXIT_FAILURE);
   }
 
   char line[256];
-  while ( fgets( line, sizeof( line ), proc_meminfo ) ) {
-    char *key = strtok( line, ":" );
-    if ( !key )
+  while (fgets(line, sizeof(line), proc_meminfo)) {
+    char *key = strtok(line, ":");
+    if (!key)
       continue;
 
-    char *valstr = strtok( nullptr, "kB" );
-    if ( !valstr )
+    char *valstr = strtok(nullptr, "kB");
+    if (!valstr)
       continue;
 
-    const unsigned long value = strtoul( valstr, nullptr, 10 );
+    const unsigned long value = strtoul(valstr, nullptr, 10);
     int                 idx   = -1;
-    for ( int i = 0; i < 6; ++i ) {
-      if ( strcmp( key, proc_meminfo_field[i] ) == 0 ) {
+    for (int i = 0; i < 6; ++i) {
+      if (strcmp(key, proc_meminfo_field[i]) == 0) {
         idx = i;
         break;
       }
     }
 
-    switch ( idx ) {
+    switch (idx) {
       case MEM_MEMTOTAL:
         info->total_mem = value;
         break;
@@ -71,7 +71,7 @@ __always_inline void initialize_mem_info( meminfo_t *info ) {
     }
   }
 
-  fclose( proc_meminfo );
+  fclose(proc_meminfo);
 #endif
 }
 
@@ -86,26 +86,26 @@ __always_inline void initialize_mem_info( meminfo_t *info ) {
  * @param info Memory allocated information
  * @return Free memory block integers in kB unit
  */
-__always_inline unsigned long calculate_free_mem_blocks( const meminfo_t *info ) {
+INLINE REGPARM(1) unsigned long calculate_free_mem_blocks(const meminfo_t *info) {
 #ifdef __linux__
   return info->mem_free + info->buffers + info->cached + info->s_reclaimable - info->shmem;
 #endif
 }
 
-static constexpr long blocks_threshold[] = { 0, 1024, 1048576, 1073741824, 1099511627776 };
-static char          *blocks_unit[]      = { "kB", "MB", "GB", "TB", "PB" };
+static constexpr long blocks_threshold[] = {0, 1024, 1048576, 1073741824, 1099511627776};
+static char          *blocks_unit[]      = {"kB", "MB", "GB", "TB", "PB"};
 
-__attribute__(( optimize( "unroll-loops" ) )) void get_readable_mem_blocks( char *buf, const unsigned long blocks ) {
-  long  threshold = -1;
-  char *buf_unit  = "\0";
-  for ( int i = 0; i < 5; ++i ) {
-    if ( blocks < blocks_threshold[i] )
+__attribute__((optimize("unroll-loops"))) INLINE REGPARM(2) void get_readable_mem_blocks(char *buf, const unsigned long blocks) {
+  long threshold = -1;
+  auto buf_unit  = "\0";
+  for (int i = 0; i < 5; ++i) {
+    if (blocks < blocks_threshold[i])
       break;
 
     threshold = blocks_threshold[i];
     buf_unit  = blocks_unit[i];
   }
 
-  const double converted_blocks = ( double )blocks / ( double )threshold;
-  sprintf( buf, "%.2f %s", converted_blocks, buf_unit );
+  const double converted_blocks = (double)blocks / (double)threshold;
+  sprintf(buf, "%.2f %s", converted_blocks, buf_unit);
 }

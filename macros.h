@@ -5,6 +5,24 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+/* Define the inline directive when available */
+#if defined(__GNUC__) && !defined(__cplusplus)
+#define INLINE __always_inline
+#elif defined(__clang__) || defined(_MSC_VER)
+#define INLINE inline
+#else
+#define INLINE
+#endif
+
+/* Define function attributes directive when available */
+#if __GNUC__ >= 3
+#define REGPARM(num) __attribute__((regparm(num)))
+#elif defined(_MSC_VER) || defined(__BORLANDC__)
+#define REGPARM(num) __fastcall
+#else
+#define REGPARM(num)
+#endif
+
 // Define the exit code of application
 #define EXIT_NORMAL  0
 #define EXIT_FAILURE 1
