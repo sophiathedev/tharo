@@ -20,7 +20,7 @@
 
 static const char *proc_meminfo_field[6] = {"MemTotal", "MemFree", "Buffers", "Cached", "SReclaimable", "Shmem"};
 
-INLINE void initialize_mem_info(meminfo_t *info) {
+INLINE REGPARM(1) void initialize_mem_info(meminfo_t *info) {
 #ifdef __linux__
   FILE *proc_meminfo = fopen("/proc/meminfo", "r");
   if (proc_meminfo == NULL) {
@@ -34,12 +34,12 @@ INLINE void initialize_mem_info(meminfo_t *info) {
     if (!key)
       continue;
 
-    char *valstr = strtok(nullptr, "kB");
+    char *valstr = strtok(NULLPTR, "kB");
     if (!valstr)
       continue;
 
-    const unsigned long value = strtoul(valstr, nullptr, 10);
-    int                 idx   = -1;
+    const unsigned long value = strtoul(valstr, NULLPTR, 10);
+    int idx                   = -1;
     for (int i = 0; i < 6; ++i) {
       if (strcmp(key, proc_meminfo_field[i]) == 0) {
         idx = i;
@@ -92,12 +92,12 @@ INLINE REGPARM(1) unsigned long calculate_free_mem_blocks(const meminfo_t *info)
 #endif
 }
 
-static constexpr long blocks_threshold[] = {0, 1024, 1048576, 1073741824, 1099511627776};
-static char          *blocks_unit[]      = {"kB", "MB", "GB", "TB", "PB"};
+static CONSTEXPR long blocks_threshold[] = {0, 1024, 1048576, 1073741824, 1099511627776};
+static char *blocks_unit[]               = {"kB", "MB", "GB", "TB", "PB"};
 
 __attribute__((optimize("unroll-loops"))) INLINE REGPARM(2) void get_readable_mem_blocks(char *buf, const unsigned long blocks) {
   long threshold = -1;
-  auto buf_unit  = "\0";
+  char *buf_unit = "\0";
   for (int i = 0; i < 5; ++i) {
     if (blocks < blocks_threshold[i])
       break;

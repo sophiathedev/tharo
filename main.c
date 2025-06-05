@@ -30,7 +30,7 @@ int main(const int argc, char **argv) {
   void *arg_tbl[] = {
     help      = arg_litn("h", "help", 0, 1, "Display this help and exit."),
     version   = arg_litn("v", "version", 0, 1, "Display version and exit."),
-    verbose   = arg_int0(nullptr, "verbose", "<level>", "Set verbosity level. Default: 0."),
+    verbose   = arg_int0(NULLPTR, "verbose", "<level>", "Set verbosity level. Default: 0."),
     mem_limit = arg_int0("M", "memory-limit", "<kB>", "Set memory limit of child process (in kB)."),
 
     arg_end(20),

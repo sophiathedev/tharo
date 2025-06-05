@@ -3,6 +3,7 @@
 //
 
 #include "logger.h"
+#include "macros.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -13,7 +14,7 @@ void verbose_msg(const int required_verbose, const int current_verbose, const ch
   if (current_verbose < required_verbose && required_verbose != 0)
     return;
 
-  const time_t     time_now   = time(nullptr);
+  const time_t     time_now   = time(NULLPTR);
   const struct tm *local_time = localtime(&time_now);
 
   char buf[80];

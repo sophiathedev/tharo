@@ -23,6 +23,19 @@
 #define REGPARM(num)
 #endif
 
+/* Define constexpr directive when available */
+#if (defined(__GNUC__) || defined(__clang__)) && __STDC_VERSION__ >= 202311L
+#define CONSTEXPR constexpr
+#else
+#define CONSTEXPR const
+#endif
+
+#if __STDC_VERSION__ >= 202311L
+#define NULLPTR nullptr
+#else
+#define NULLPTR NULL
+#endif
+
 // Define the exit code of application
 #define EXIT_NORMAL  0
 #define EXIT_FAILURE 1
