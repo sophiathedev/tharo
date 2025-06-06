@@ -47,4 +47,7 @@
 #define VERBOSE_ERROR 4
 #define VERBOSE_ALL   99
 
+// Define memory macros
+#define MEM_LIM_UNLIMITED ULONG_MAX
+
 #endif  //MACROS_H

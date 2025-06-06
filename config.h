@@ -6,12 +6,22 @@
 #define CONFIG_H
 
 #include <limits.h>
-
-#define MEM_LIM_UNLIMITED ULONG_MAX
+#include <stdbool.h>
 
 struct config {
   unsigned long memory_limit;  // memory limit for the process in kB
   short         verbosity;
+
+  /**
+   * This is flag for sandbox mode usage, Tharo provide 2 modes is syscall filter mode and sandbox isolated mode.
+   *
+   * With syscall filter mode, when process reached a now allowed syscall or reached resource limit, process will be terminated (SIGKILL).
+   *
+   * With sandbox isolated mode, process will run with fully allowed syscall but doesn't effect to main operating system.
+   *
+   * Config usage default is seccomp mode.
+   */
+  bool sandbox;
 };
 
 typedef struct config config_t;
