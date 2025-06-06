@@ -75,17 +75,9 @@ int main(const int argc, char **argv) {
 }
 
 void freeup_and_exit(void *arg_tbl, const int exitcode) {
+  arg_freetable(arg_tbl, sizeof(*arg_tbl));
   free(config);
   free(meminfo);
-
-  /* for strictly heap in use at exit */
-  free(help);
-  free(version);
-  free(mem_limit);
-  free(verbose);
-  free(end);
-
-  arg_freetable(arg_tbl, sizeof(*arg_tbl));
 
   exit(exitcode);
 }
