@@ -14,6 +14,7 @@ FetchContent_MakeAvailable(argtable3)
 add_executable(tharo
         main.c
         macros.h
+        messages.h
         version.h
         config.c
         config.h
@@ -21,6 +22,8 @@ add_executable(tharo
         logger.h
         memory.c
         memory.h
+        safemem.c
+        safemem.h
 )
 
 target_link_libraries(tharo PRIVATE argtable3)

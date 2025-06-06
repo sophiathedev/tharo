@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "logger.h"
 #include "macros.h"
 
@@ -96,6 +97,11 @@ static CONSTEXPR long blocks_threshold[] = {0, 1024, 1048576, 1073741824, 109951
 static char *blocks_unit[]               = {"kB", "MB", "GB", "TB", "PB"};
 
 __attribute__((optimize("unroll-loops"))) INLINE REGPARM(2) void get_readable_mem_blocks(char *buf, const unsigned long blocks) {
+  if (blocks == MEM_LIM_UNLIMITED) {
+    sprintf(buf, "unlimited");
+    return;
+  }
+
   long threshold = -1;
   char *buf_unit = "\0";
   for (int i = 0; i < 5; ++i) {

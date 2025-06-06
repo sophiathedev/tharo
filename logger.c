@@ -6,6 +6,7 @@
 #include "macros.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 static char *verbose_lbl[5] = {"", "INFO", "DEBUG", "WARN", "ERROR"};
