@@ -1,4 +1,5 @@
 #include <argtable3.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "config.h"
@@ -8,7 +9,7 @@
 #include "safemem.h"
 #include "version.h"
 
-static struct arg_lit *help, *version;
+static struct arg_lit *help, *version, *sandbox;
 static struct arg_int *verbose, *mem_limit;
 static struct arg_end *end;
 static config_t       *config;
@@ -27,15 +28,15 @@ int main(const int argc, char **argv) {
     help      = arg_litn("h", "help", 0, 1, "Display this help and exit."),
     version   = arg_litn("v", "version", 0, 1, "Display version and exit."),
     verbose   = arg_int0(NULLPTR, "verbose", "<level>", "Set verbosity level. Default: 0."),
-    mem_limit = arg_int0("M", "memory-limit", "<kB>", "Set memory limit of child process (in kB) (default = unlimited)."),
+    mem_limit = arg_int0("M", "memory-limit", "<kB>", "Set memory limit of child process (in kB) (default: unlimited)."),
+    sandbox   = arg_litn(NULLPTR, "sandbox", 0, 1, "Set isolated sandbox mode (default: false)."),
 
     end = arg_end(20),
   };
   const int n_errors = arg_parse(argc, argv, arg_tbl);
 
-  if (n_errors) {
+  if (n_errors)
     freeup_and_exit(arg_tbl, EXIT_FAILURE);
-  }
 
   if (help->count) {
     printf("Usage: %s", APPLICATION_NAME);
@@ -52,6 +53,11 @@ int main(const int argc, char **argv) {
 
   if (verbose->count)
     config->verbosity = (short)*verbose->ival;
+
+  if (sandbox->count) {
+    config->sandbox = true;
+    verbose_msg(VERBOSE_INFO, config->verbosity, "using sandbox mode via config\n");
+  }
 
   if (mem_limit->count)
     config->memory_limit = (unsigned long)*mem_limit->ival;
